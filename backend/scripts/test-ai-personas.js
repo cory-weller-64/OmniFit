@@ -1,3 +1,8 @@
+/**
+ * AI Persona Test Script
+ * Evaluates AI Coach response quality across diverse user demographics and goals.
+ */
+
 async function testPersona(name, userProfile, existingRoutines, message) {
   console.log(`\n--- Testing Persona: ${name} ---`);
   console.log(`Profile: ${JSON.stringify(userProfile)}`);
@@ -21,12 +26,15 @@ async function testPersona(name, userProfile, existingRoutines, message) {
     });
 
     if (!response.ok) {
-      console.error(`Error: ${response.status}`);
+      console.error(`Error: ${response.status} ${response.statusText}`);
       return;
     }
 
     const data = await response.json();
     console.log(`AI Response:\n${data.text}`);
+    if (data.split) {
+      console.log(`AI Split Recommendation:`, data.split);
+    }
     if (data.suggestions) {
       console.log(`AI Suggestions: ${JSON.stringify(data.suggestions, null, 2)}`);
     }
@@ -37,21 +45,21 @@ async function testPersona(name, userProfile, existingRoutines, message) {
 
 async function runTests() {
   await testPersona(
-    "Senior Beginner",
+    "Senior Beginner (Safety & Joint-Protection Focus)",
     { age: 65, weight_kg: 110, height_cm: 175, bmi: "35.9" },
     [],
     "I want to start getting active again. What kind of routine should I do?"
   );
-/*
+
   await testPersona(
-    "Young Athlete",
+    "Hypertrophy Athlete (Volume & Progression Focus)",
     { age: 22, weight_kg: 80, height_cm: 185, bmi: "23.4" },
     [],
     "I want to pack on muscle as fast as possible. I can train 5 days a week."
   );
 
   await testPersona(
-    "The Specialist",
+    "The Specialist (Routine Complement Analysis)",
     { age: 30, weight_kg: 85, height_cm: 180, bmi: "26.2" },
     [
       { 
@@ -61,7 +69,6 @@ async function runTests() {
     ],
     "Look at my existing routines and suggest a new one that complements them."
   );
-*/
 }
 
 runTests();

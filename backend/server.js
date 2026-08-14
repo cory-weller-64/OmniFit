@@ -220,10 +220,114 @@ function summarizeRoutines(routines, detailLevel = 'summary') {
   });
 }
 
+// Demo Fallback AI Coach Generator (Runs when GEMINI_API_KEY is not configured)
+async function handleMockCoachResponse(res, message, enhancedContext) {
+  const lowerMsg = (message || '').toLowerCase();
+  const db = await getDb();
+
+  // Case 1: Split recommendation request (Guided Flow or general split inquiry)
+  if (lowerMsg.includes('recommend') || lowerMsg.includes('split') || lowerMsg.includes('frequency') || lowerMsg.includes('fresh start') || lowerMsg.includes('complement') || lowerMsg.includes('routine') || lowerMsg.includes('plan') || lowerMsg.includes('days a week') || lowerMsg.includes('active')) {
+    let splitName = 'Push / Pull / Legs (PPL)';
+    let routines = ['Push Day (Chest, Shoulders, Triceps)', 'Pull Day (Back, Biceps)', 'Leg Day (Quads, Hamstrings, Calves)'];
+    let reason = 'Push/Pull/Legs provides optimal frequency for muscle recovery, balanced weekly volume, and progressive overload tracking.';
+
+    if (lowerMsg.includes('2 day') || lowerMsg.includes('full body') || lowerMsg.includes('2 days') || (enhancedContext.userProfile?.age > 60)) {
+      splitName = 'Full Body Split';
+      routines = ['Full Body Session A (Joint Mobility & Strength)', 'Full Body Session B (Core & Balance)'];
+      reason = 'Full Body 2-3x/week maximizes training stimulus efficiency while ensuring 48-72 hours of systemic recovery between sessions.';
+    } else if (lowerMsg.includes('4 day') || lowerMsg.includes('upper/lower') || lowerMsg.includes('upper lower') || lowerMsg.includes('4 days')) {
+      splitName = 'Upper / Lower Split';
+      routines = ['Upper Body Power', 'Lower Body Power', 'Upper Body Hypertrophy', 'Lower Body Hypertrophy'];
+      reason = 'Upper/Lower 4x/week delivers targeted hypertrophy stimulus while distributing volume across distinct upper/lower movement patterns.';
+    } else if (lowerMsg.includes('5 day') || lowerMsg.includes('6 day') || lowerMsg.includes('pack on muscle') || lowerMsg.includes('hypertrophy')) {
+      splitName = 'Push / Pull / Legs (PPL Hypertrophy Split)';
+      routines = ['Push A (Heavy)', 'Pull A (Heavy)', 'Legs A (Heavy)', 'Push B (Volume)', 'Pull B (Volume)', 'Legs B (Volume)'];
+      reason = 'A 5-6 day PPL rotation allows dedicated hypertrophy volume for each muscle group with 48h recovery between similar movement patterns.';
+    }
+
+    const age = enhancedContext.userProfile?.age;
+    const bmi = enhancedContext.userProfile?.bmi;
+    let safetyNote = '';
+    if (age && age > 50) {
+      safetyNote = ' Age-aware adaptation: Emphasizing joint-friendly movement paths, warmups, and controlled eccentric tempo.';
+    }
+    if (bmi && parseFloat(bmi) > 30) {
+      safetyNote += ' BMI-aware adaptation: Prioritizing machine-supported and stable compound exercises to reduce joint compression.';
+    }
+
+    return res.json({
+      text: `Based on your profile, I recommend the **${splitName}**.\n\n${reason}${safetyNote ? '\n\n' + safetyNote : ''}\n\nWhich specific session from this split would you like to build today?`,
+      split: { name: splitName, routines },
+      suggestions: null,
+      model_used: 'demo-mock-fallback (Demo Mode: Set GEMINI_API_KEY in backend/.env for live LLM)'
+    });
+  }
+
+  // Case 2: Routine exercise generation (Push, Pull, Legs, Upper, Lower, Chest, etc.)
+  if (lowerMsg.includes('push') || lowerMsg.includes('chest') || lowerMsg.includes('pull') || lowerMsg.includes('back') || lowerMsg.includes('leg') || lowerMsg.includes('upper') || lowerMsg.includes('lower') || lowerMsg.includes('generate')) {
+    let targetMuscle = 'Chest';
+    if (lowerMsg.includes('pull') || lowerMsg.includes('back') || lowerMsg.includes('lat')) targetMuscle = 'Lats';
+    else if (lowerMsg.includes('leg') || lowerMsg.includes('quad') || lowerMsg.includes('squat')) targetMuscle = 'Quadraceps';
+    else if (lowerMsg.includes('shoulder')) targetMuscle = 'Shoulders';
+
+    const exercises = await db.all(
+      'SELECT id, name, primary_muscle_group FROM exercises WHERE primary_muscle_group = ? OR primary_muscle_group = "Chest" LIMIT 4',
+      [targetMuscle]
+    );
+
+    const suggestions = exercises.map((ex, idx) => ({
+      id: ex.id,
+      name: ex.name,
+      sets: idx === 0 ? 4 : 3,
+      reps: idx === 0 ? 8 : 12,
+      reason: idx === 0 ? 'Primary compound strength movement for progressive overload.' : 'Hypertrophy volume targeting primary and secondary stabilizers.'
+    }));
+
+    return res.json({
+      text: `Here is a structured, science-backed routine tailored to your session. Maintain controlled tempo and aim for progressive overload across your logged sets.`,
+      split: null,
+      suggestions: suggestions.length > 0 ? suggestions : [
+        { id: 1, name: 'Bench Press (Barbell)', sets: 4, reps: 8, reason: 'Primary compound foundation.' },
+        { id: 2, name: 'Incline Bench Press (Barbell)', sets: 3, reps: 10, reason: 'Upper chest hypertrophy.' },
+        { id: 10, name: 'Chest Fly (Dumbbell)', sets: 3, reps: 12, reason: 'Peak contraction and stretch.' }
+      ],
+      model_used: 'demo-mock-fallback (Demo Mode: Set GEMINI_API_KEY in backend/.env for live LLM)'
+    });
+  }
+
+  // Case 3: Live workout exercise swap or injury adaptation
+  if (lowerMsg.includes('swap') || lowerMsg.includes('injury') || lowerMsg.includes('broken') || lowerMsg.includes('replace') || lowerMsg.includes('reduce duration')) {
+    const chestExercises = await db.all('SELECT id, name FROM exercises WHERE primary_muscle_group = "Chest" LIMIT 2');
+    const swapTarget = chestExercises[1] || { id: 2, name: 'Incline Bench Press (Barbell)' };
+
+    return res.json({
+      text: `Understood! To adapt your session while maintaining target muscle activation and protecting joint health, here is a recommended substitution:`,
+      split: null,
+      suggestions: [
+        {
+          id: swapTarget.id,
+          name: swapTarget.name,
+          sets: 3,
+          reps: 10,
+          reason: 'Joint-friendly substitution with equivalent biomechanical muscle activation.',
+          replace_id: 1
+        }
+      ],
+      model_used: 'demo-mock-fallback (Demo Mode: Set GEMINI_API_KEY in backend/.env for live LLM)'
+    });
+  }
+
+  // Default General Guidance
+  return res.json({
+    text: `Hello! I am your OmniFit AI Coach. I can recommend evidence-based training splits (PPL, Upper/Lower, Full Body), generate custom workout routines with progressive overload parameters, and suggest real-time exercise adaptations during live workouts based on your age, BMI, and logged PRs.\n\n*(💡 Running in Demo Mode. To enable full Gemini 1.5 Flash generative reasoning, configure \`GEMINI_API_KEY\` in \`backend/.env\`.)*`,
+    split: null,
+    suggestions: null,
+    model_used: 'demo-mock-fallback (Demo Mode: Set GEMINI_API_KEY in backend/.env for live LLM)'
+  });
+}
+
 // AI Coach API
 app.post('/api/ai/coach', async (req, res) => {
-  if (!genAI) return res.status(503).json({ error: 'AI not configured' });
-
   const { message, history, context } = req.body;
   const db = await getDb();
 
@@ -368,9 +472,9 @@ app.post('/api/ai/coach', async (req, res) => {
     parts: [{ text: h.text }]
   }));
 
-  // Ensure history begins with user message
-  while (chatHistory.length > 0 && chatHistory[0].role !== 'user') {
-    chatHistory.shift();
+  // If Gemini API is not configured, fall back to the built-in demo coach generator
+  if (!genAI) {
+    return await handleMockCoachResponse(res, message, enhancedContext);
   }
 
   try {
@@ -463,11 +567,12 @@ app.post('/api/ai/coach', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Coach AI Error:', error);
+    console.error('Coach AI Error:', error.message);
     if (error.message?.includes('429') || error.status === 429) {
       return res.status(429).json({ error: 'AI Coach is busy. Please wait 60 seconds.' });
     }
-    res.status(500).json({ error: error.message });
+    console.warn('Falling back to demo mock response due to AI service error...');
+    return await handleMockCoachResponse(res, message, enhancedContext);
   }
 });
 

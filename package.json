@@ -1,0 +1,29 @@
+{
+  "name": "omnifit-workout-tracker",
+  "version": "2.0.0",
+  "description": "OmniFit: Context-Aware AI Coaching, Adaptive Gamification & Local-First Fitness Architecture (Dissertation Project)",
+  "author": "Cory Weller",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm start --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "test": "npm test --prefix backend",
+    "test:unit": "node backend/tests/unit/gamification.test.js && node backend/tests/unit/records.test.js",
+    "test:integration": "node backend/tests/integration/streak.test.js && node backend/tests/integration/dashboard_api.test.js && node backend/tests/integration/routine_builder.test.js && node backend/tests/integration/live_workout_flow.test.js"
+  },
+  "keywords": [
+    "fitness-tracker",
+    "ai-coach",
+    "gemini-ai",
+    "gamification",
+    "local-first",
+    "sqlite",
+    "react",
+    "express",
+    "dissertation",
+    "portfolio"
+  ]
+}

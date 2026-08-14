@@ -93,7 +93,7 @@ h3 { font-size: 1.4rem; margin-bottom: 1rem; }
   letter-spacing: -0.5px;
 }
 
-/* Universal Card Styling (The "Titan" Aesthetic) */
+/* Universal Card Styling (The OmniFit Dark Aesthetic) */
 .card, .level-card, .routine-card, .analytics-card, .workout-summary-card {
   background: var(--card-bg);
   border: 2px solid var(--light-blue);

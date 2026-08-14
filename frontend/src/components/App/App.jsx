@@ -46,7 +46,7 @@ function App() {
     <Router>
       <div className="app-container">
         <header style={{ position: 'relative' }}>
-          <h1>Fitness Tracker V2</h1>
+          <h1>OmniFit</h1>
         </header>
 
         <main>

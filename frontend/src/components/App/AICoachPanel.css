@@ -1,0 +1,388 @@
+.ai-coach-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: flex-end;
+    z-index: 2000;
+}
+
+.ai-coach-panel {
+    width: 50%;
+    height: 100%;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid var(--accent);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8), -2px 0 10px var(--accent-glow);
+    color: var(--text);
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-coach-panel::after {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+    background-size: 100% 4px, 3px 100%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.ai-coach-header {
+    padding: 1rem 1.5rem;
+    background: var(--card-bg);
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 20;
+}
+
+.title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.medical-disclaimer {
+    margin: 0;
+    font-size: 0.7rem;
+    color: #ef4444;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+}
+
+.ai-coach-header h3 {
+    margin: 0;
+    font-family: var(--heading);
+    color: var(--text-h);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.2rem;
+}
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+.ai-coach-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 20;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.message {
+    max-width: 90%;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    line-height: 1.6;
+    position: relative;
+    letter-spacing: 0.01em;
+}
+
+.message.user {
+    align-self: flex-end;
+    background: rgba(6, 182, 212, 0.15);
+    color: var(--text-h);
+    border: 1px solid var(--accent);
+    border-bottom-right-radius: 2px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(6, 182, 212, 0.1);
+}
+
+.message.model {
+    align-self: flex-start;
+    background: rgba(30, 41, 59, 0.8);
+    /* Slightly more opaque card-bg */
+    color: var(--text-h);
+    /* High contrast white */
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 2px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.suggestion-box {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(6, 182, 212, 0.05);
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    position: relative;
+    overflow: hidden;
+}
+
+.suggestion-box::before {
+    content: "AI RECOMMENDATION";
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 0.6rem;
+    font-weight: 900;
+    padding: 2px 6px;
+    border-bottom-left-radius: 4px;
+}
+
+.suggestion-box h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-transform: uppercase;
+}
+
+.suggestion-box ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.suggestion-box li {
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--text-h);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 0.5rem;
+}
+
+.suggestion-box li:last-child {
+    border-bottom: none;
+}
+
+.suggestion-box .reason {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text);
+    font-style: italic;
+    margin-top: 0.25rem;
+}
+
+.apply-suggestions-btn {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background: var(--accent);
+    border: none;
+    border-radius: 4px;
+    color: var(--bg);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.apply-suggestions-btn:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 15px var(--accent-glow);
+    transform: translateY(-1px);
+}
+
+.ai-coach-input {
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border-top: 2px solid var(--border);
+    display: flex;
+    gap: 0.75rem;
+    position: relative;
+    z-index: 20;
+}
+
+.ai-coach-input input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-h);
+    font-family: var(--sans);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.ai-coach-input input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 5px var(--accent-glow);
+}
+
+.ai-coach-input button {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 4px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ai-coach-input button:hover:not(:disabled) {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.ai-coach-input button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.thinking {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent !important;
+    border: none !important;
+}
+
+.pulse {
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: cyber-pulse 1s infinite alternate;
+    box-shadow: 0 0 5px var(--accent);
+}
+
+.pulse:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.pulse:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes cyber-pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.3;
+        box-shadow: 0 0 0px var(--accent);
+    }
+
+    100% {
+        transform: scale(1.2);
+        opacity: 1;
+        box-shadow: 0 0 10px var(--accent);
+    }
+}
+
+.message-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.option-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+}
+
+.option-btn:hover:not(:disabled) {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.option-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.multiple-choice {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px dashed var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-h);
+    padding: 0.25rem 0;
+}
+
+.checkbox-item input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+}
+
+.step-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    color: #fff;
+    font-family: var(--sans);
+    outline: none;
+}
+
+.step-input:focus {
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+@media (max-width: 768px) {
+    .ai-coach-panel {
+        width: 100%;
+    }
+}

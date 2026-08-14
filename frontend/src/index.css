@@ -1,0 +1,166 @@
+:root {
+  --text: #94a3b8;
+  --text-h: #ffffff;
+  --bg: #020617;
+  --card-bg: #0f172a;
+  --border: #1e293b;
+  --light-blue: #a5f3fc;
+  --accent: #06b6d4; /* Cyan/Light Blue */
+  --accent-glow: rgba(6, 182, 212, 0.3);
+  --glow-blue: rgba(6, 182, 212, 0.5);
+  --success: #10b981;
+  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --heading: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color-scheme: dark;
+  color: var(--text);
+  background-color: var(--bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Side Column Decoration */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+  opacity: 0.1;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::before {
+  left: 0;
+  border-right: 1px solid var(--accent);
+}
+
+body::after {
+  right: 0;
+  border-left: 1px solid var(--accent);
+}
+
+@media (max-width: 1200px) {
+  body::before,
+  body::after {
+    display: none;
+  }
+}
+
+#root {
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+/* Typography Overhaul */
+h1, h2, h3, h4, h5 {
+  font-family: var(--heading);
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-top: 0;
+  text-shadow: 0 0 10px var(--glow-blue);
+}
+
+h1 { font-size: 2.5rem; margin-bottom: 1.5rem; }
+h2 { font-size: 1.8rem; margin-bottom: 1.25rem; }
+h3 { font-size: 1.4rem; margin-bottom: 1rem; }
+
+/* Numeric & Data Displays */
+.value, .xp-val, .pr-val, .stat-value, .counter, .mono-data {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+}
+
+/* Universal Card Styling (The "Titan" Aesthetic) */
+.card, .level-card, .routine-card, .analytics-card, .workout-summary-card {
+  background: var(--card-bg);
+  border: 2px solid var(--light-blue);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.15), var(--shadow);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Button Refactor */
+button {
+  font-family: var(--sans);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: #020617;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 4px 6px -1px var(--accent-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+  box-shadow: 0 10px 15px -3px var(--accent-glow);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Progress Bars */
+.xp-bar-container {
+  height: 8px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #818cf8);
+  box-shadow: 0 0 10px var(--accent-glow);
+  transition: width 0.5s ease-out;
+}
+
+/* Layout Helpers */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* High-tech glow for specific elements */
+.glow-text {
+  text-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* Responsive Overrides */
+@media (max-width: 640px) {
+  h1 { font-size: 2rem; }
+  .card, .level-card { padding: 1.25rem; }
+}

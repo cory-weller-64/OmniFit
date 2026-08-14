@@ -229,8 +229,8 @@ async function initializeSchema(db) {
 
   // User seeding
   const seedUsers = [
-    { id: 1, username: 'DissertationUser', email: 'user@example.com' },
-    { id: 2, username: 'Jane Doe', email: 'jane@example.com' }
+    { id: 1, username: 'OmniFit Member', email: 'member@omnifit.app' },
+    { id: 2, username: 'Guest Athlete', email: 'guest@omnifit.app' }
   ];
 
   for (const u of seedUsers) {
@@ -238,6 +238,8 @@ async function initializeSchema(db) {
     if (!existing) {
       await db.run('INSERT INTO users (id, username, email) VALUES (?, ?, ?)', [u.id, u.username, u.email]);
       console.log(`Seeded user: ${u.username}`);
+    } else {
+      await db.run('UPDATE users SET username = ?, email = ? WHERE id = ?', [u.username, u.email, u.id]);
     }
   }
 

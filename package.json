@@ -12,7 +12,8 @@
     "build": "npm run build --prefix frontend",
     "test": "npm test --prefix backend",
     "test:unit": "node backend/tests/unit/gamification.test.js && node backend/tests/unit/records.test.js",
-    "test:integration": "node backend/tests/integration/streak.test.js && node backend/tests/integration/dashboard_api.test.js && node backend/tests/integration/routine_builder.test.js && node backend/tests/integration/live_workout_flow.test.js"
+    "test:integration": "node backend/tests/integration/streak.test.js && node backend/tests/integration/dashboard_api.test.js && node backend/tests/integration/routine_builder.test.js && node backend/tests/integration/live_workout_flow.test.js",
+    "db:reset": "node backend/scripts/reset-db.js"
   },
   "keywords": [
     "fitness-tracker",

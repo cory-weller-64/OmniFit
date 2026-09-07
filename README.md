@@ -26,6 +26,38 @@ A persistent challenge in modern digital health technologies is **user retention
 
 ---
 
+## 📸 Application Interface & Feature Walkthrough
+
+OmniFit provides a responsive, dark-themed user interface designed to minimize workout logging friction and deliver context-aware AI coaching in real time:
+
+| Live Workout Tracking & Rest Timer | In-Workout AI Overload Challenge |
+| :---: | :---: |
+| ![Live Workout Tracker](screenshots/Live_workout.png) | ![In-Workout AI Challenge](screenshots/AI_exercise_challenge.png) |
+| *Sync-as-you-go set logging with integrated rest interval timer* | *Dynamic mid-session overload prompts adapting to current PRs* |
+
+| Context-Aware AI Coaching Drawer | Post-Session "Victory Lap" Gamification |
+| :---: | :---: |
+| ![AI Coach Recommendations](screenshots/AI_coach_feedback.png) | ![Victory Lap XP Breakdown](screenshots/Workout_XP_Summary.png) |
+| *Push/Pull balance analysis with 1-click routine imports* | *Dynamic XP formula breakdown, 1RM PR detection, and level gains* |
+
+| User Progression Dashboard | Custom Routine Builder |
+| :---: | :---: |
+| ![Dashboard & Physical Profile](screenshots/Home.png) | ![Routine Builder](screenshots/Routine_builder.png) |
+| *72h grace period streak tracker, level rank, and physical profile* | *Target set/rep sequencing with recently used movement tags* |
+
+<details>
+<summary><b>🔍 View Additional Interfaces (Catalog Search, Routine Library, Level Badges)</b></summary>
+<br>
+
+| Exercise Catalog & Filtering | Routine Management Deck | Progression Badge & Streaks |
+| :---: | :---: | :---: |
+| ![Exercise Search & Muscle Filter](screenshots/Exercise_list.png) | ![Saved Routines & Quick Start](screenshots/Routines.png) | ![User Stats & Rank Badge](screenshots/User_stats.png) |
+| *85+ exercise catalog with fuzzy search and muscle filters* | *Quick-start routine decks with custom note support* | *Level 30 "Vanguard of Strength" status card* |
+
+</details>
+
+---
+
 ## 🏛️ System Architecture
 
 ```mermaid
